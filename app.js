@@ -138,6 +138,30 @@ app.post('/add-product',async(req,res)=>{
     }
 })
 
+//task-5 -> create a route to see the particular details
+app.get('/product/:id',async(req,res)=>{
+    try{
+        const {id} = req.params;
+        if(!id){
+            return res.status(400).json({message:'Product id is missing'});
+        }
+        const token = req.headers.token;
+        const userEmailFromToken = jwt.verify(token,'supersecret');
+        if(!userEmailFromToken.email){
+            const product = await Product.findById(id);
+
+            if(!product){
+                return res.status(400).json({message:'Product not found'});
+            }
+            return res.status(200).json({message:'success',product});
+          
+        }
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({message:'Internal server error'})
+    }
+})
+
 const PORT = 8080;
 app.listen(PORT,()=>{
     console.log(`Server is connected to port ${PORT}`);
