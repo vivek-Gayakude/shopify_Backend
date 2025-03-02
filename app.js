@@ -271,7 +271,7 @@ app.get('/product/search/:keyword',async(req,res)=>{
     try{
         const products = await Product.find({
             name:{$regex: keyword, $options:"i"}
-        });
+            
         if(products.length === 0){
             return res.status(404).json({message:"No Product Found"});
         }
